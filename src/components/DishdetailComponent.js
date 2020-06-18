@@ -9,13 +9,16 @@ class DishDetail extends Component {
 
     commentView(dish){
         
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        // const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const comments = dish.comments.map((dishComment) => {
             const commentDate = new Date(dishComment.date);
             return(
                 <div key={dishComment.id}>
                 <p>{dishComment.comment}</p>
-            <p>-- {dishComment.author} , {monthNames[commentDate.getMonth()]} {(commentDate.getDate() < 10 ? ("0"+commentDate.getDate()) : commentDate.getDate())}, {(commentDate.getFullYear()) }</p>
+            <p>-- 
+                {/* {dishComment.author} , {monthNames[commentDate.getMonth()]} {(commentDate.getDate() < 10 ? ("0"+commentDate.getDate()) : commentDate.getDate())}, {(commentDate.getFullYear()) } */}
+                {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(dishComment.date)))}
+                </p>
                 </div>
             );
         })
