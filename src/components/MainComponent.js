@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
 import { DISHES } from '../shared/dishes';
 import Menu from './MenuComponent'
+import Header from './HeaderComponent';
 import DishDetail from './DishdetailComponent';
+import Footer from './FooterComponent';
 
 class Main extends Component {
 
@@ -22,16 +24,13 @@ class Main extends Component {
   render() {
     return (
       <div>
-          <Navbar dark color="primary">
-            <NavbarBrand href="/">
-              FundooApp
-            </NavbarBrand>
-          </Navbar>
+        <Header />
         <Menu dishes={this.state.dishes}
          onClick={(dishId) => this.onDishSelect(dishId)}/>
          <div className="container">
          <DishDetail dish={this.state.dishes.filter((dish) => dish.id == this.state.selectedDish)[0]} />
          </div>
+         <Footer />
       </div>
     );
   }
