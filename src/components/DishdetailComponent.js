@@ -1,6 +1,97 @@
-import React from 'react';
-import { Card, CardImgOverlay, CardImg, CardText, CardTitle, CardBody, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from 'react';
+import { Card, CardImgOverlay, CardImg, CardText, CardTitle, CardBody, Breadcrumb, BreadcrumbItem,
+     Button, Jumbotron, Modal, ModalBody, ModalHeader, Label, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form'
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
+
+    class CommentForm extends Component {
+
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                isModelOpen: false
+            }
+
+            this.CommentModalSwitch = this.CommentModalSwitch.bind(this);
+        }
+
+        CommentModalSwitch() {
+
+            this.setState({
+                isModelOpen: !this.state.isModelOpen
+            })
+        }
+
+        handleCommentSubmit(values) {
+            this.CommentModalSwitch();
+
+            alert(JSON.stringify(values));
+        }
+
+        render() {
+            return(
+            <React.Fragment>
+            <Button className="mt-4" outline onClick={this.CommentModalSwitch}><span className="fa fa-pencil fa-lg"></span> Submit Comment</Button>
+            
+                <Modal isOpen={this.state.isModelOpen} toggle={this.CommentModalSwitch}>
+                    <ModalHeader toggle={this.CommentModalSwitch}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                        <LocalForm onSubmit={(values) => this.handleCommentSubmit(values)}>
+                            <Row className="form-group">
+                                <Col md={12}>
+                                    <Label htmlFor="rating">Rating</Label>
+                                    <Control.select model=".rating" id="rating" name="rating" className="form-control custom-select" >
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={12}>
+                                    <Label htmlFor="authorName">Your Name</Label>
+                                    <Control.text model=".authorName" id="authorName" name="authorName" placeholder="Your Name" className="form-control" 
+                                    validators={{
+                                        required, minLength: minLength(3), maxLength: maxLength(15)
+                                    }} />
+                                    <Errors
+                                className="text-danger"
+                                model=".authorName"
+                                show="touched"
+                                messages={{
+                                    required: 'Required ',
+                                    minLength: 'Must be greater than 2 characters',
+                                    maxLength: 'Must be 15 characters or less'
+                                }} />
+                                </Col>
+                                
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={12}>
+                                    <Label htmlFor="authorComment">Your Name</Label>
+                                    <Control.textarea rows="6" model=".authorComment" id="authorComment" name="authorComment" className="form-control"/>
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={12}>
+                                    <Button type="submit" color="primary">Submit</Button>
+                                </Col>
+                            </Row>
+                            
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
+            </React.Fragment>
+            );
+        }
+    }
 
     function CommentView(comment){
         
@@ -19,6 +110,7 @@ import { Link } from 'react-router-dom';
         })
         return comments;
     }
+
  
     function RenderDish({dish}) {
 
@@ -48,6 +140,9 @@ import { Link } from 'react-router-dom';
                 <ul className="list-unstyled">
                     {CommentView(comments)}
                 </ul>
+                <div>
+                    <CommentForm />
+                </div>
                 </div>
             )}
         }else {
